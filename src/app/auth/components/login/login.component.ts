@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -9,8 +10,8 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-
   private authService = inject(AuthService)
+  private router = inject(Router)
 
   loginForm = new FormGroup({
     email: new FormControl("", [Validators.email, Validators.required]),
@@ -20,13 +21,13 @@ export class LoginComponent {
   funIngresar() {
     this.authService.loginConNest(this.loginForm.value).subscribe(
       (res) => {
-        console.log("Respuesta del backend:", res)
+        console.log(res)
+        this.router.navigate(["/admin"])
       },
       (error) => {
-        console.error("Error al ingresar:", error)
+        console.log(error)
       }
     )
     //alert("Ingresando...")
   }
-
 }
